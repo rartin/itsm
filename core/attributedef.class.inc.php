@@ -41,6 +41,7 @@ require_once('datetimeformat.class.inc.php');
 // This should be changed to a use when we go full-namespace
 require_once(APPROOT.'sources/form/validator/validator.class.inc.php');
 require_once(APPROOT.'sources/form/validator/notemptyextkeyvalidator.class.inc.php');
+require_once(APPROOT.'lib/gravatarlib/Gravatar.php');
 
 /**
  * MissingColumnException - sent if an attribute is being created but the column is missing in the row
@@ -7259,22 +7260,20 @@ class AttributeImage extends AttributeBlob
 	 * @param bool $bLocalize
 	 *
 	 * @return string
+	 * @throws \CoreException
 	 */
 	public function GetAsHTML($value, $oHostObject = null, $bLocalize = true)
 	{
+		$iMaxWidth = $this->Get('display_max_width');
+		$iMaxWidthPx = $iMaxWidth.'px';
+		$iMaxHeight = $this->Get('display_max_height');
+		$iMaxHeightPx = $iMaxHeight.'px';
+
 		$sRet = '';
-
-		$iMaxWidthPx = $this->Get('display_max_width').'px';
-		$iMaxHeightPx = $this->Get('display_max_height').'px';
-
-		$sDefaultImageUrl = $this->Get('default_image');
-		if ($sDefaultImageUrl !== null) {
-			$sRet = $this->GetHtmlForImageUrl($sDefaultImageUrl, $iMaxWidthPx, $iMaxHeightPx);
-		}
-
-		$sCustomImageUrl = $this->GetAttributeImageFileUrl($value, $oHostObject);
-		if ($sCustomImageUrl !== null) {
-			$sRet = $this->GetHtmlForImageUrl($sCustomImageUrl, $iMaxWidthPx, $iMaxHeightPx);
+		$sAttributeImageUrl = $this->GetAttributeImageUrl($value, $oHostObject, $iMaxWidth, $iMaxHeight);
+		if ($sAttributeImageUrl !== null)
+		{
+			$sRet = $this->GetHtmlForImageUrl($sAttributeImageUrl, $iMaxWidthPx, $iMaxHeightPx);
 		}
 
 		return '<div class="view-image" style="width: '.$iMaxWidthPx.'; height: '.$iMaxHeightPx.';"><span class="helper-middle"></span>'.$sRet.'</div>';
@@ -7287,8 +7286,41 @@ class AttributeImage extends AttributeBlob
 	/**
 	 * @param \ormDocument $value
 	 * @param \DBObject $oHostObject
+	 * @param int $iMaxWidth
+	 * @param int $iMaxHeight
 	 *
-	 * @return null|string
+	 * @return string url to use for display : first file attached, then gravatar, then default, and then null if none of those
+	 * @throws \CoreException
+	 */
+	private function GetAttributeImageUrl($value, $oHostObject, $iMaxWidth, $iMaxHeight) {
+		$sCustomImageUrl = $this->GetAttributeImageFileUrl($value, $oHostObject);
+		if ($sCustomImageUrl !== null)
+		{
+			return $sCustomImageUrl;
+		}
+
+		$sDefaultImageUrl = $this->Get('default_image');
+		$sGravatarAttCode = $this->HasParam('gravatar_attcode') ? $this->Get('gravatar_attcode') : null;
+		if ($sGravatarAttCode !== null)
+		{
+			$sEmail = $oHostObject->Get($sGravatarAttCode);
+			$sGravatarUrl = $this->GetGravatarUrl($sEmail, $iMaxWidth, $iMaxHeight, $sDefaultImageUrl);
+			return $sGravatarUrl;
+		}
+
+		if ($sDefaultImageUrl !== null)
+		{
+			return $sDefaultImageUrl;
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param \ormDocument $value
+	 * @param \DBObject $oHostObject
+	 *
+	 * @return null|string attached file url (could be a data url if needed)
 	 */
 	private function GetAttributeImageFileUrl($value, $oHostObject) {
 		if (!is_object($value)) {
@@ -7307,6 +7339,22 @@ class AttributeImage extends AttributeBlob
 		}
 
 		return $value->GetDownloadURL(get_class($oHostObject), $oHostObject->GetKey(), $this->GetCode());
+	}
+
+	private function GetGravatarUrl($sEmail, $iMaxWidth, $iMaxHeight, $sDefaultImageUrl) {
+		if (empty($sEmail)) {
+			return null;
+		}
+
+		$iMaxSize = max($iMaxWidth, $iMaxHeight);
+		$iMaxSize = min(512, $iMaxSize);
+
+		$oGravatar = new \emberlabs\GravatarLib\Gravatar();
+		$oGravatar->enableSecureImages()
+			->setDefaultImage($sDefaultImageUrl) //won't work for localhost but ok with a valid hostname (eg https://demo.combodo.com/simple/env-production/itop-config-mgmt/images/silhouette.png)
+			->setAvatarSize($iMaxSize);
+
+		return $oGravatar->buildGravatarURL($sEmail);
 	}
 
 	static public function GetFormFieldClass()

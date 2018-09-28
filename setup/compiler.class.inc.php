@@ -1385,6 +1385,9 @@ EOF
 					{
 						$aParameters['default_image'] = 'null';
 					}
+
+					$aParameters['gravatar_attcode'] = $this->GetPropString($oField, 'gravatar_attcode');
+					//TODO check attcode exists and is an AttributeEmailAddress
 				}
 				elseif ($sAttType == 'AttributeStopWatch')
 				{
