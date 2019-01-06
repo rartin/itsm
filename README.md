@@ -1,7 +1,4 @@
-<p align="center"><a href="https://www.combodo.com/itop-193" target="_blank">
-    <img src="https://www.combodo.com/logos/logo-itop.svg">
-</a></p>
-
+This repo is copied form https://github.com/Combodo/iTop
 
 # iTop - ITSM & CMDB
  
