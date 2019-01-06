@@ -1,10 +1,9 @@
 This repo is copied form https://github.com/Combodo/iTop
-
-# iTop - ITSM & CMDB
+([Combodo][0]).
+# ITSM & CMDB
  
-iTop stands for *IT Operations Portal*.
-It is a complete open source, ITIL, web based service management tool including a fully customizable CMDB, a helpdesk system and a document management tool. 
-iTop also offers mass import tools and web services to integrate with your IT
+This is an open source web based ITSM tool including a customizable CMDB, a helpdesk system and a document management tool. 
+It also offers mass import tools and web services to integrate with your IT
 
 ## Features
 - Fully configurable [Configuration Management (CMDB)][10]
@@ -49,50 +48,10 @@ iTop also offers mass import tools and web services to integrate with your IT
  - [Download iTop 2.4.1][53]
 
 
-# About Us
+# About
 
-iTop development is sponsored, led and supported by [Combodo][0].
+iTop development is sponsored, 
 
-
-# Contributors
-
-We would like to give a special thank you to the people from the community who contributed to this project, including:
- - Alves, David
- - Beck, Pedro
- - Bilger, Jean-François
- - Bostoen, Jeffrey
- - Cardoso, Anderson
- - Cassaro, Bruno
- - Casteleyn, Thomas
- - Castro, Randall Badilla
- - Colantoni, Maria Laura
- - Dvořák, Lukáš
- - Goethals, Stefan
- - Gumble, David
- - Hippler, Lars
- - Khamit, Shamil
- - Konečný, Kamil
- - Kunin, Vladimir
- - Lassiter, Dennis
- - Lucas, Jonathan
- - Malik, Remie
- - Rosenke, Stephan
- - Seki, Shoji
- - Shilov, Vladimir
- - Tulio, Marco
- - Turrubiates, Miguel
-
-#### Aliases
- - chifu1234
- - cprobst
- - jbostoen
- - Karkoff1212
- - larhip
- - Laura
- - Purple Grape
- - Schlobinux
- - theBigOne
- - ulmerspatz
 
 #### Companies
  - Hardis
