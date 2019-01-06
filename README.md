@@ -1,5 +1,6 @@
-This repo is copied form https://github.com/Combodo/iTop
-([Combodo][0]).
+This repo is cloned form https://github.com/Combodo/iTop
+ ([Combodo][0]).
+ 
 # ITSM & CMDB
  
 This is an open source web based ITSM tool including a customizable CMDB, a helpdesk system and a document management tool. 
